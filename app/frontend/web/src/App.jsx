@@ -35,6 +35,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [nextStopNum, setNextStopNum] = useState(1);
+  const [activeTab, setActiveTab] = useState("plan");
 
   useEffect(() => {
     getConfig()
@@ -115,6 +116,7 @@ export default function App() {
     try {
       const data = await optimize(requestBody);
       setResult(data);
+      setActiveTab("map");
     } catch (e) {
       setError(JSON.stringify(e.data ?? { error: e.message }, null, 2));
     } finally {
@@ -128,7 +130,7 @@ export default function App() {
 
   return (
     <APIProvider apiKey={config.googleMapsApiKey} libraries={["places"]}>
-      <div id="layout">
+      <div id="layout" data-tab={activeTab}>
         <div id="sidebar">
           <h3>route.me</h3>
 
@@ -164,8 +166,24 @@ export default function App() {
 
           <RoutePanel result={result} stops={stops} />
         </div>
+
         <div id="map">
           <MapView mapId={config.googleMapsMapId} depot={depot} stops={stops} result={result} />
+        </div>
+
+        <div className="tab-bar">
+          <button
+            className={activeTab === "plan" ? "active" : ""}
+            onClick={() => setActiveTab("plan")}
+          >
+            ✏️ Plan
+          </button>
+          <button
+            className={activeTab === "map" ? "active" : ""}
+            onClick={() => setActiveTab("map")}
+          >
+            🗺️ Map{result ? " ✓" : ""}
+          </button>
         </div>
       </div>
     </APIProvider>
