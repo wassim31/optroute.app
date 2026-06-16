@@ -1,0 +1,9 @@
+requests
+redis
+ortools
+fastapi
+pydantic<2
+httpx
+uvicorn
+pytest
+python-dotenv
