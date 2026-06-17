@@ -49,6 +49,7 @@
   .slide-4 { background: linear-gradient(135deg, #2a1620, #16213e); }
   .slide-5 { background: linear-gradient(135deg, #0d1b2a, #11241c); }
   .slide-6 { background: linear-gradient(135deg, #131e36, #0f3460); }
+  .slide-roi { background: linear-gradient(135deg, #11241c, #122a44); }
   .slide-7 { background: radial-gradient(circle at 70% 80%, #1b2e2a, #0f0c29 70%); }
 
   /* ── TYPE ── */
@@ -128,6 +129,22 @@
   .btn { display: inline-block; background: linear-gradient(135deg, var(--green), #2bb889); color: #06281f; font-size: clamp(15px,1.8vw,18px); font-weight: 800; padding: clamp(13px,1.8vh,16px) clamp(28px,3.5vw,42px); border-radius: 50px; border: none; cursor: pointer; letter-spacing: .3px; transition: transform .2s, box-shadow .2s; }
   .btn:hover, .btn:active { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(78,204,163,0.4); }
 
+  /* ── ROI / FUEL SLIDE ── */
+  .fuel-strip { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 5px 14px; font: 600 clamp(11px,1.4vw,14px) 'Courier New', monospace; color: var(--muted); background: rgba(0,0,0,0.32); border: 1px solid rgba(255,209,102,0.35); border-radius: 30px; padding: 8px 18px; margin: clamp(8px,1.5vh,14px) 0; }
+  .fuel-strip .hl { color: var(--gold); font-weight: 800; }
+  .roi-balance { display: flex; align-items: stretch; justify-content: center; gap: clamp(8px,1.6vw,16px); flex-wrap: wrap; margin: clamp(10px,1.8vh,18px) 0; }
+  .rb-block { display: flex; flex-direction: column; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: clamp(14px,2vh,20px) clamp(16px,2.2vw,26px); min-width: 152px; }
+  .rb-block.price { background: rgba(124,131,253,0.16); border: 2px solid rgba(124,131,253,0.7); box-shadow: 0 8px 26px rgba(124,131,253,0.28); }
+  .rb-block.gain  { background: rgba(78,204,163,0.16); border-color: rgba(78,204,163,0.55); }
+  .rb-cap { font-size: clamp(10px,1.2vw,12px); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+  .rb-num { font: 800 clamp(26px,4.4vw,46px)/1 monospace; }
+  .rb-num small { font-size: 0.4em; color: var(--muted); font-weight: 700; }
+  .rb-block.save  .rb-num { color: var(--gold); }
+  .rb-block.price .rb-num { color: #fff; }
+  .rb-block.gain  .rb-num { color: var(--green); }
+  .rb-lbl { font-size: clamp(11px,1.3vw,13px); color: var(--muted); margin-top: 8px; line-height: 1.35; }
+  .rb-op { display: flex; align-items: center; font: 800 clamp(18px,2.6vw,30px) monospace; color: var(--muted); }
+
   /* ── PROGRESS BAR ── */
   .progress { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.08); z-index: 110; }
   .progress-fill { height: 100%; width: 14%; background: linear-gradient(90deg, var(--blue), var(--green)); transition: width 0.4s ease; box-shadow: 0 0 10px rgba(124,131,253,0.6); }
@@ -170,6 +187,7 @@
     .compare { flex-direction: column; }
     .steps { flex-direction: column; }
     .step-arrow { transform: rotate(90deg); }
+    .roi-balance { flex-direction: column; }
   }
 </style>
 </head>
@@ -352,12 +370,46 @@
     <div class="save-badge pop"><span class="pct">−34%</span><span class="lbl">de coûts sur chaque tournée</span></div>
   </div>
 
-  <!-- ── 7 · CTA ── -->
+  <!-- ── 7 · LE CALCUL (ROI carburant) ── -->
+  <div class="slide slide-roi">
+    <div class="tag">Le calcul</div>
+    <h2>Seulement <span class="accent">20 €/mois</span> par véhicule</h2>
+
+    <div class="fuel-strip">
+      ⛽ 17 juin 2026 — Gasoil <span class="hl">1,814 €/L</span> · E10 1,816 · SP98 1,928 · E85 0,815 · GPL 0,979
+    </div>
+
+    <div class="roi-balance">
+      <div class="rb-block save">
+        <span class="rb-cap">Carburant économisé</span>
+        <span class="rb-num">95 €<small>/mois</small></span>
+        <span class="rb-lbl">par véhicule*</span>
+      </div>
+      <div class="rb-op">−</div>
+      <div class="rb-block price">
+        <span class="rb-cap">Prix OptRoute</span>
+        <span class="rb-num">20 €<small>/mois</small></span>
+        <span class="rb-lbl">par véhicule, tout compris</span>
+      </div>
+      <div class="rb-op">=</div>
+      <div class="rb-block gain">
+        <span class="rb-cap">Votre gain net</span>
+        <span class="rb-num">+75 €<small>/mois</small></span>
+        <span class="rb-lbl">par véhicule</span>
+      </div>
+    </div>
+
+    <div class="cap">* −20 % de trajet ≈ <b>440 km/mois</b> × 1,814 €/L (≈ 12 L/100 km). <b>Et ce, × toute votre flotte.</b></div>
+
+    <div class="line"><b>Payer 20 €/mois pour ne pas en perdre 95</b><span class="muted"> — le choix est vite fait.</span></div>
+  </div>
+
+  <!-- ── 8 · CTA ── -->
   <div class="slide slide-7">
     <div class="eyebrow">Prêt à réduire vos coûts ?</div>
     <h1>Essayez OptRoute<br>sur votre <span class="good">tournée</span></h1>
     <div class="line muted" style="margin-bottom:clamp(20px,3vh,34px)">Moins de carburant · Plus de livraisons · Dès aujourd'hui</div>
-    <button class="btn" onclick="window.open('https://outstanding-creativity-production-b5ce.up.railway.app/','_blank')">Demander une démo →</button>
+    <button class="btn" onclick="window.open('http://localhost:8000','_blank')">Demander une démo →</button>
   </div>
 
 </div>
@@ -456,6 +508,10 @@
 
   // Kick off the slide-1 truck on first load.
   window.addEventListener('load', runSlide1);
+
+  // Initialise counter + progress for the current total (slides may change).
+  slideNum.textContent = '01 / ' + String(total).padStart(2, '0');
+  progress.style.width = (100 / total) + '%';
 </script>
 </body>
 </html>
