@@ -63,18 +63,6 @@ html, body, #root {
   padding: 16px 18px;
 }
 
-.brand-mark {
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-2));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 4px 14px rgba(91, 95, 245, 0.35);
-}
-
 .brand-text h1 {
   margin: 0;
   font-size: 19px;
@@ -87,6 +75,21 @@ html, body, #root {
   font-size: 12px;
   color: var(--muted);
 }
+
+.install-btn {
+  margin: 0 0 0 auto;
+  padding: 7px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 1px solid #dadcfb;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.15s;
+}
+.install-btn:hover { background: #e2e5ff; transform: translateY(-1px); }
 
 /* ── CARDS ── */
 .card {

@@ -22,12 +22,36 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [nextStopNum, setNextStopNum] = useState(1);
   const [activeTab, setActiveTab] = useState("plan");
+  const [installPrompt, setInstallPrompt] = useState(null);
 
   useEffect(() => {
     getConfig()
       .then(setConfig)
       .catch((e) => setError(`Failed to load config: ${e.message}`));
   }, []);
+
+  // Capture the browser's install prompt so we can trigger it from our own
+  // button instead of relying on the browser's (often hidden) affordance.
+  useEffect(() => {
+    const onBeforeInstall = (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    const onInstalled = () => setInstallPrompt(null);
+    window.addEventListener("beforeinstallprompt", onBeforeInstall);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    setInstallPrompt(null);
+  };
 
   const handleDepotSelected = useCallback((place) => {
     setDepot(place);
@@ -120,11 +144,15 @@ export default function App() {
       <div id="layout" data-tab={activeTab}>
         <aside id="sidebar">
           <header className="app-header">
-            <span className="brand-mark">📍</span>
             <div className="brand-text">
               <h1>OptRoute</h1>
               <p>Smart route optimization</p>
             </div>
+            {installPrompt && (
+              <button type="button" className="install-btn" onClick={handleInstall} title="Install app">
+                📲 Install
+              </button>
+            )}
           </header>
 
           <div className="sidebar-scroll">
