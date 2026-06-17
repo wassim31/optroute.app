@@ -327,27 +327,36 @@ html, body, #root {
   color: var(--muted);
 }
 
-.stop-options {
+.stop-item.incomplete { border-color: rgba(245, 180, 60, 0.7); }
+
+.stop-fields {
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px dashed var(--border);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-.opt-row {
-  display: flex;
-  align-items: center;
   gap: 10px;
 }
-.opt-row label {
-  font-size: 12px;
+.field label {
+  display: block;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--muted);
-  width: 92px;
-  flex-shrink: 0;
+  margin-bottom: 5px;
 }
-.opt-row input[type="number"] { width: 80px; }
+.field .req { color: var(--danger); }
+.field input[type="number"] { width: 100%; }
+
+.footer-hint {
+  background: #fff6e6;
+  color: #9a6500;
+  border: 1px solid #f3d9a0;
+  border-radius: 10px;
+  padding: 9px 11px;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
 
 /* ── INPUTS (number, time) ── */
 input[type="number"],

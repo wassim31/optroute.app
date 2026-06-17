@@ -67,7 +67,7 @@ export default function App() {
     (place) => {
       setStops((prev) => [
         ...prev,
-        { id: `S${nextStopNum}`, ...place, demand: 1, timeWindowStart: "", timeWindowEnd: "" },
+        { id: `S${nextStopNum}`, ...place, demand: "", timeWindowStart: "", timeWindowEnd: "" },
       ]);
       setNextStopNum((n) => n + 1);
       setResult(null);
@@ -90,7 +90,11 @@ export default function App() {
     setResult(null);
   }, []);
 
-  const canOptimize = depot && stops.length > 0 && !loading;
+  // Every stop must have a product count (≥1) and a full delivery time window.
+  const isStopComplete = (s) =>
+    parseInt(s.demand, 10) >= 1 && s.timeWindowStart && s.timeWindowEnd;
+  const stopsComplete = stops.every(isStopComplete);
+  const canOptimize = depot && stops.length > 0 && stopsComplete && !loading;
 
   const handleOptimize = async () => {
     setError("");
@@ -104,16 +108,18 @@ export default function App() {
       setError("Please add at least one stop.");
       return;
     }
+    if (!stopsComplete) {
+      setError("Each stop needs a number of products (≥ 1) and a delivery time window.");
+      return;
+    }
 
     const shift = [timeToSeconds(shiftStart) ?? FULL_DAY_WINDOW[0], timeToSeconds(shiftEnd) ?? FULL_DAY_WINDOW[1]];
 
     const requestBody = {
       depot: { lat: depot.lat, lon: depot.lon },
       stops: stops.map((s) => {
-        const start = timeToSeconds(s.timeWindowStart);
-        const end = timeToSeconds(s.timeWindowEnd);
-        const time_window = start !== null && end !== null ? [start, end] : FULL_DAY_WINDOW;
-        return { id: s.id, lat: s.lat, lon: s.lon, demand: s.demand, time_window };
+        const time_window = [timeToSeconds(s.timeWindowStart), timeToSeconds(s.timeWindowEnd)];
+        return { id: s.id, lat: s.lat, lon: s.lon, demand: parseInt(s.demand, 10), time_window };
       }),
       vehicle: { id: "v1", capacity: vehicleCapacity, shift },
     };
@@ -221,6 +227,9 @@ export default function App() {
           </div>
 
           <footer className="sidebar-footer">
+            {stops.length > 0 && !stopsComplete && (
+              <div className="footer-hint">⚠ Set the number of products and a delivery time for every stop.</div>
+            )}
             {error && <div className="error-box">{error}</div>}
             <button type="button" className="optimize-btn" onClick={handleOptimize} disabled={!canOptimize}>
               {loading ? (
