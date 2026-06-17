@@ -4,9 +4,14 @@ import { useMapsLibrary } from "@vis.gl/react-google-maps";
 // A plain <input> wired up to Google Places Autocomplete. Selecting a
 // suggestion calls onPlaceSelected with {address, lat, lon} and clears
 // the input, ready for the next search.
-export default function LocationSearch({ placeholder, onPlaceSelected }) {
+//
+// `bias` (optional {lat, lon}) biases suggestions toward that point — used
+// so that, once a depot is set, nearby stop addresses rank first instead of
+// a broad worldwide search.
+export default function LocationSearch({ placeholder, onPlaceSelected, bias }) {
   const placesLib = useMapsLibrary("places");
   const inputRef = useRef(null);
+  const autocompleteRef = useRef(null);
   const onPlaceSelectedRef = useRef(onPlaceSelected);
   onPlaceSelectedRef.current = onPlaceSelected;
 
@@ -19,6 +24,7 @@ export default function LocationSearch({ placeholder, onPlaceSelected }) {
     const autocomplete = new placesLib.Autocomplete(inputRef.current, {
       fields: ["formatted_address", "name", "geometry"],
     });
+    autocompleteRef.current = autocomplete;
 
     const listener = autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
@@ -37,8 +43,23 @@ export default function LocationSearch({ placeholder, onPlaceSelected }) {
     return () => {
       listener.remove();
       window.google.maps.event.clearInstanceListeners(autocomplete);
+      autocompleteRef.current = null;
     };
   }, [placesLib]);
+
+  // Bias predictions toward the depot (~30 km radius) so nearby addresses
+  // are prioritised. This is a soft bias, not a hard restriction — far-away
+  // places can still be picked if typed explicitly.
+  useEffect(() => {
+    const autocomplete = autocompleteRef.current;
+    if (!autocomplete || !bias || !window.google) return;
+
+    const circle = new window.google.maps.Circle({
+      center: { lat: bias.lat, lng: bias.lon },
+      radius: 30000,
+    });
+    autocomplete.setBounds(circle.getBounds());
+  }, [bias, placesLib]);
 
   return (
     <div className="search-field">

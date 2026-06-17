@@ -181,7 +181,7 @@ export default function App() {
                   <button className="link-btn" onClick={handleClearStops}>Clear</button>
                 )}
               </div>
-              <LocationSearch placeholder="Add a delivery stop…" onPlaceSelected={handleStopSelected} />
+              <LocationSearch placeholder="Add a delivery stop…" onPlaceSelected={handleStopSelected} bias={depot} />
               <StopList stops={stops} onRemove={handleRemoveStop} onUpdate={handleUpdateStop} />
             </section>
 
