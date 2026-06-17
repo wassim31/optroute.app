@@ -40,5 +40,18 @@ export default function LocationSearch({ placeholder, onPlaceSelected }) {
     };
   }, [placesLib]);
 
-  return <input ref={inputRef} type="text" placeholder={placeholder} className="location-search" />;
+  return (
+    <div className="search-field">
+      <svg className="search-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <path
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          d="M21 21l-4.3-4.3M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"
+        />
+      </svg>
+      <input ref={inputRef} type="text" placeholder={placeholder} className="location-search" />
+    </div>
+  );
 }

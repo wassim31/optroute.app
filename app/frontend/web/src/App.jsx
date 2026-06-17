@@ -9,21 +9,6 @@ import { timeToSeconds } from "./lib/time.js";
 
 const FULL_DAY_WINDOW = [0, 24 * 3600];
 
-const DEFAULT_DEPOT = { address: "13 rue Pitre Chevalier, Nantes, France", lat: 47.2241112, lon: -1.5502079 };
-
-const DEFAULT_STOPS = [
-  { address: "Château des Ducs de Bretagne, Nantes, France", lat: 47.2161171, lon: -1.5493127 },
-  { address: "Cathédrale Saint-Pierre-et-Saint-Paul, Nantes, France", lat: 47.2186, lon: -1.5475 },
-  { address: "Passage Pommeraye, Nantes, France", lat: 47.2138, lon: -1.5559 },
-  { address: "Place Graslin, Nantes, France", lat: 47.2127, lon: -1.5572 },
-  { address: "Place Royale, Nantes, France", lat: 47.2143, lon: -1.5543 },
-  { address: "Jardin des Plantes, Nantes, France", lat: 47.2208, lon: -1.5466 },
-  { address: "Île de Nantes, Nantes, France", lat: 47.2055, lon: -1.5475 },
-  { address: "Les Machines de l'île, Nantes, France", lat: 47.2047, lon: -1.5478 },
-  { address: "Musée d'Arts de Nantes, Nantes, France", lat: 47.2178, lon: -1.5512 },
-  { address: "Cours des 50 Otages, Nantes, France", lat: 47.2155, lon: -1.5552 },
-];
-
 export default function App() {
   const [config, setConfig] = useState(null);
   const [depot, setDepot] = useState(null);
@@ -31,6 +16,7 @@ export default function App() {
   const [vehicleCapacity, setVehicleCapacity] = useState(20);
   const [shiftStart, setShiftStart] = useState("08:00");
   const [shiftEnd, setShiftEnd] = useState("16:00");
+  const [showSettings, setShowSettings] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,24 +29,13 @@ export default function App() {
       .catch((e) => setError(`Failed to load config: ${e.message}`));
   }, []);
 
-  // Pre-fill the depot and a set of default Nantes stops on first load, so
-  // the app is ready to optimize without manual searching every time.
-  useEffect(() => {
-    setDepot(DEFAULT_DEPOT);
-    setStops(
-      DEFAULT_STOPS.map((stop, i) => ({
-        id: `S${i + 1}`,
-        ...stop,
-        demand: 1,
-        timeWindowStart: "",
-        timeWindowEnd: "",
-      }))
-    );
-    setNextStopNum(DEFAULT_STOPS.length + 1);
-  }, []);
-
   const handleDepotSelected = useCallback((place) => {
     setDepot(place);
+    setResult(null);
+  }, []);
+
+  const handleClearDepot = useCallback(() => {
+    setDepot(null);
     setResult(null);
   }, []);
 
@@ -86,16 +61,23 @@ export default function App() {
     setResult(null);
   }, []);
 
+  const handleClearStops = useCallback(() => {
+    setStops([]);
+    setResult(null);
+  }, []);
+
+  const canOptimize = depot && stops.length > 0 && !loading;
+
   const handleOptimize = async () => {
     setError("");
     setResult(null);
 
     if (!depot) {
-      setError("Please search and select a depot location.");
+      setError("Please add a starting point first.");
       return;
     }
     if (stops.length === 0) {
-      setError("Please add at least one stop location.");
+      setError("Please add at least one stop.");
       return;
     }
 
@@ -118,73 +100,122 @@ export default function App() {
       setResult(data);
       setActiveTab("map");
     } catch (e) {
-      setError(JSON.stringify(e.data ?? { error: e.message }, null, 2));
+      setError(e.data?.detail || e.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   if (!config) {
-    return <div className="loading">{error || "Loading..."}</div>;
+    return (
+      <div className="loading">
+        <span className="spinner" />
+        {error || "Loading…"}
+      </div>
+    );
   }
 
   return (
     <APIProvider apiKey={config.googleMapsApiKey} libraries={["places"]}>
       <div id="layout" data-tab={activeTab}>
-        <div id="sidebar">
-          <h3>route.me</h3>
+        <aside id="sidebar">
+          <header className="app-header">
+            <span className="brand-mark">📍</span>
+            <div className="brand-text">
+              <h1>route.me</h1>
+              <p>Smart route optimization</p>
+            </div>
+          </header>
 
-          <label>Depot location</label>
-          <LocationSearch placeholder="Search depot, e.g. 10 Rue de Rivoli, Paris" onPlaceSelected={handleDepotSelected} />
-          {depot && <p className="selected-depot">📍 {depot.address}</p>}
+          <div className="sidebar-scroll">
+            <section className="card">
+              <div className="card-head">
+                <span className="step-num">1</span>
+                <h2>Starting point</h2>
+              </div>
+              {depot ? (
+                <div className="chip">
+                  <span className="chip-icon">🏠</span>
+                  <span className="chip-text" title={depot.address}>{depot.address}</span>
+                  <button className="chip-clear" onClick={handleClearDepot} aria-label="Change starting point">×</button>
+                </div>
+              ) : (
+                <LocationSearch placeholder="Search your depot or warehouse…" onPlaceSelected={handleDepotSelected} />
+              )}
+            </section>
 
-          <label>Add a stop</label>
-          <LocationSearch placeholder="Search a location, e.g. Commerce, Nantes" onPlaceSelected={handleStopSelected} />
-          <StopList stops={stops} onRemove={handleRemoveStop} onUpdate={handleUpdateStop} />
+            <section className="card">
+              <div className="card-head">
+                <span className="step-num">2</span>
+                <h2>Stops</h2>
+                {stops.length > 0 && <span className="count-badge">{stops.length}</span>}
+                {stops.length > 0 && (
+                  <button className="link-btn" onClick={handleClearStops}>Clear</button>
+                )}
+              </div>
+              <LocationSearch placeholder="Add a delivery stop…" onPlaceSelected={handleStopSelected} />
+              <StopList stops={stops} onRemove={handleRemoveStop} onUpdate={handleUpdateStop} />
+            </section>
 
-          <label htmlFor="vehicleCapacity">Vehicle capacity</label>
-          <input
-            id="vehicleCapacity"
-            type="number"
-            min="1"
-            value={vehicleCapacity}
-            onChange={(e) => setVehicleCapacity(parseInt(e.target.value, 10) || 1)}
-          />
+            <section className="card">
+              <button
+                type="button"
+                className="card-head as-toggle"
+                onClick={() => setShowSettings((s) => !s)}
+                aria-expanded={showSettings}
+              >
+                <span className="step-num">3</span>
+                <h2>Vehicle settings</h2>
+                <span className={`chevron ${showSettings ? "open" : ""}`}>⌄</span>
+              </button>
+              {showSettings && (
+                <div className="settings-body">
+                  <label htmlFor="vehicleCapacity">Capacity</label>
+                  <input
+                    id="vehicleCapacity"
+                    type="number"
+                    min="1"
+                    value={vehicleCapacity}
+                    onChange={(e) => setVehicleCapacity(parseInt(e.target.value, 10) || 1)}
+                  />
 
-          <label htmlFor="shift">Vehicle working hours</label>
-          <div className="shift-range" id="shift">
-            <input type="time" value={shiftStart} onChange={(e) => setShiftStart(e.target.value)} />
-            <span>to</span>
-            <input type="time" value={shiftEnd} onChange={(e) => setShiftEnd(e.target.value)} />
+                  <label htmlFor="shift">Working hours</label>
+                  <div className="time-range" id="shift">
+                    <input type="time" value={shiftStart} onChange={(e) => setShiftStart(e.target.value)} />
+                    <span>–</span>
+                    <input type="time" value={shiftEnd} onChange={(e) => setShiftEnd(e.target.value)} />
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <RoutePanel result={result} stops={stops} />
           </div>
 
-          <button type="button" onClick={handleOptimize} disabled={loading}>
-            {loading ? "Optimizing..." : "Optimize"}
-          </button>
-
-          {error && <div id="error">{error}</div>}
-
-          <RoutePanel result={result} stops={stops} />
-        </div>
+          <footer className="sidebar-footer">
+            {error && <div className="error-box">{error}</div>}
+            <button type="button" className="optimize-btn" onClick={handleOptimize} disabled={!canOptimize}>
+              {loading ? (
+                <><span className="spinner sm" /> Optimizing…</>
+              ) : (
+                <>⚡ Optimize route</>
+              )}
+            </button>
+          </footer>
+        </aside>
 
         <div id="map">
           <MapView mapId={config.googleMapsMapId} depot={depot} stops={stops} result={result} />
         </div>
 
-        <div className="tab-bar">
-          <button
-            className={activeTab === "plan" ? "active" : ""}
-            onClick={() => setActiveTab("plan")}
-          >
+        <nav className="tab-bar">
+          <button className={activeTab === "plan" ? "active" : ""} onClick={() => setActiveTab("plan")}>
             ✏️ Plan
           </button>
-          <button
-            className={activeTab === "map" ? "active" : ""}
-            onClick={() => setActiveTab("map")}
-          >
+          <button className={activeTab === "map" ? "active" : ""} onClick={() => setActiveTab("map")}>
             🗺️ Map{result ? " ✓" : ""}
           </button>
-        </div>
+        </nav>
       </div>
     </APIProvider>
   );
