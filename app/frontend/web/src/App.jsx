@@ -122,7 +122,7 @@ export default function App() {
           <header className="app-header">
             <span className="brand-mark">📍</span>
             <div className="brand-text">
-              <h1>route.me</h1>
+              <h1>OptRoute</h1>
               <p>Smart route optimization</p>
             </div>
           </header>
