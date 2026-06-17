@@ -32,7 +32,7 @@
     inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: safe center;
     align-items: center;
     padding: 70px clamp(16px, 5vw, 72px) 96px;
     opacity: 0;
@@ -43,28 +43,30 @@
   }
   .slide.active { opacity: 1; pointer-events: all; }
 
-  .slide-1 { background: radial-gradient(circle at 30% 20%, #302b63, #0f0c29 70%); }
-  .slide-2 { background: linear-gradient(135deg, #2a1620, #16213e); }
+  .slide-1 { background: linear-gradient(135deg, #2a1620, #16213e); }
+  .slide-2 { background: linear-gradient(135deg, #2a1620, #1a1a2e); }
   .slide-3 { background: linear-gradient(135deg, #1a1a2e, #16213e); }
-  .slide-4 { background: linear-gradient(135deg, #0d1b2a, #11241c); }
-  .slide-5 { background: linear-gradient(135deg, #131e36, #0f3460); }
-  .slide-6 { background: linear-gradient(135deg, #16213e, #1b2e2a); }
-  .slide-7 { background: radial-gradient(circle at 70% 80%, #302b63, #0f0c29 70%); }
+  .slide-4 { background: linear-gradient(135deg, #2a1620, #16213e); }
+  .slide-5 { background: linear-gradient(135deg, #0d1b2a, #11241c); }
+  .slide-6 { background: linear-gradient(135deg, #131e36, #0f3460); }
+  .slide-7 { background: radial-gradient(circle at 70% 80%, #1b2e2a, #0f0c29 70%); }
 
   /* ── TYPE ── */
   .eyebrow { font-size: clamp(10px,1.4vw,13px); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: clamp(8px,1.6vh,16px); }
-  h1 { font-size: clamp(30px,6vw,64px); font-weight: 800; line-height: 1.05; margin-bottom: clamp(10px,1.8vh,18px); }
-  h1 .accent { color: var(--blue); }
-  h2 { font-size: clamp(19px,3.4vw,36px); font-weight: 700; line-height: 1.15; margin-bottom: clamp(12px,2.2vh,24px); }
+  h1 { font-size: clamp(28px,5.5vw,58px); font-weight: 800; line-height: 1.07; margin-bottom: clamp(10px,1.8vh,18px); }
+  h1 .accent { color: var(--blue); } h1 .danger { color: var(--red); } h1 .good { color: var(--green); }
+  h2 { font-size: clamp(20px,3.6vw,38px); font-weight: 700; line-height: 1.15; margin-bottom: clamp(12px,2.2vh,24px); }
   h2 .danger { color: var(--red); } h2 .good { color: var(--green); } h2 .accent { color: var(--blue); }
   .line { font-size: clamp(15px,2.1vw,21px); color: var(--ink); font-weight: 600; margin-top: clamp(10px,1.8vh,18px); }
   .line .danger { color: var(--red); } .line .good { color: var(--green); } .line .muted { color: var(--muted); font-weight: 400; }
+  .cap { font-size: clamp(13px,1.7vw,17px); color: var(--muted); max-width: 600px; line-height: 1.55; margin-top: clamp(8px,1.4vh,14px); }
+  .cap b { color: var(--ink); font-weight: 700; }
   .tag { display: inline-block; background: rgba(124,131,253,0.15); border: 1px solid rgba(124,131,253,0.4); color: var(--blue); font-size: clamp(11px,1.3vw,13px); font-weight: 600; padding: 5px 14px; border-radius: 20px; margin-bottom: clamp(12px,2vh,22px); letter-spacing: 1px; }
+  .tag.red { background: rgba(255,107,107,0.12); border-color: rgba(255,107,107,0.4); color: var(--red); }
 
   /* ── ROUTE FIGURES ── */
   .route-svg { width: 100%; height: auto; display: block; }
   .stop-dot  { fill: #1a1a2e; stroke-width: 3; }
-  .stop-num  { font: 700 14px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
   .depot-dot { fill: #0f0f1a; stroke: #fff; stroke-width: 3; }
   .depot-lbl { font: 700 13px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
   .path-bad  { fill: none; stroke: var(--red);   stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(255,107,107,0.6)); }
@@ -75,11 +77,9 @@
   .slide.active .pop { animation: pop 0.5s ease both; }
   @keyframes pop { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
 
-  .fig-wrap { width: 100%; max-width: 460px; margin: clamp(6px,1.4vh,14px) 0; }
-  .cap { font-size: clamp(12px,1.6vw,16px); color: var(--muted); max-width: 560px; line-height: 1.5; margin-top: clamp(6px,1.2vh,12px); }
-  .cap b { color: var(--ink); font-weight: 700; }
+  .fig-wrap { width: 100%; max-width: 440px; margin: clamp(6px,1.4vh,14px) 0; }
 
-  /* ── MAGIC OPTIMIZER (slide 4) ── */
+  /* ── MAGIC OPTIMIZER (slide 5) ── */
   .cand { fill: none; stroke: #5b6385; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
   .slide.active .cand { animation: flicker 2s linear forwards; }
   .slide.active .cand.c2 { animation-delay: 0.18s; }
@@ -95,19 +95,22 @@
   .slide.active .optimal { stroke-dasharray: 1600; stroke-dashoffset: 1600; opacity: 0; animation: lockin 1.4s ease 1.7s forwards; }
   @keyframes lockin { from { stroke-dashoffset: 1600; opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
 
-  /* ── FACTORIAL (slide 3) ── */
-  .mult { font: 700 clamp(15px,3vw,30px) 'Courier New', monospace; color: var(--gold); letter-spacing: 1px; }
-  .equals { font-size: clamp(20px,3vw,30px); color: var(--muted); margin: clamp(6px,1.2vh,12px) 0; }
-  .bignum { font: 800 clamp(34px,8vw,80px)/1 'Courier New', monospace; color: var(--red); letter-spacing: -1px; filter: drop-shadow(0 0 18px rgba(255,107,107,0.4)); }
-  .bignum-lbl { font-size: clamp(12px,1.6vw,16px); color: var(--muted); margin-top: 8px; letter-spacing: 1px; }
+  /* ── PAIN / BENEFIT / COST FIGURES ── */
+  .figs { display: flex; gap: clamp(14px,3vw,40px); flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+  .fig { display: flex; flex-direction: column; align-items: center; max-width: 180px; }
+  .fig .ic { font-size: clamp(34px,5vw,52px); margin-bottom: 8px; }
+  .fig .num { font: 800 clamp(26px,4.5vw,48px)/1 monospace; color: var(--green); }
+  .fig.cost .num { color: var(--red); }
+  .fig .cap { font-size: clamp(12px,1.5vw,15px); color: var(--muted); margin-top: 8px; line-height: 1.4; }
 
-  /* ── FORMULA PILL (slide 4) ── */
-  .rule { font: 800 clamp(17px,3.2vw,32px) 'Courier New', monospace; margin: clamp(10px,2vh,20px) 0 clamp(6px,1.2vh,10px); }
-  .rule .d { color: var(--green); } .rule .t { color: var(--blue); } .rule .op { color: var(--red); } .rule .sm { color: var(--ink); }
-  .curio { display: inline-flex; align-items: center; gap: 8px; font: 600 clamp(12px,1.5vw,15px) 'Courier New', monospace; color: var(--muted); background: rgba(0,0,0,0.3); border: 1px solid rgba(124,131,253,0.3); border-radius: 30px; padding: 6px 16px; }
-  .curio .sig { font-size: 1.4em; color: var(--gold); }
+  /* ── CLASSIC-WAY STEPS (slide 3) ── */
+  .steps { display: flex; align-items: stretch; justify-content: center; gap: clamp(8px,1.5vw,16px); flex-wrap: wrap; margin: clamp(10px,2vh,22px) 0; }
+  .step { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: clamp(14px,2vw,22px) clamp(14px,2vw,20px); min-width: 130px; }
+  .step .ic { font-size: clamp(28px,4vw,42px); display: block; margin-bottom: 8px; }
+  .step .lbl { font-size: clamp(12px,1.5vw,15px); color: var(--ink); font-weight: 600; line-height: 1.35; }
+  .step-arrow { display: flex; align-items: center; color: var(--muted); font-size: clamp(18px,2.5vw,26px); }
 
-  /* ── COMPARISON (slide 5) ── */
+  /* ── COMPARISON (slide 6) ── */
   .compare { display: flex; gap: clamp(14px,2.5vw,32px); width: 100%; max-width: 900px; align-items: stretch; }
   .compare .col { flex: 1; min-width: 0; }
   .col-head { font-size: clamp(13px,1.6vw,16px); font-weight: 700; margin-bottom: 8px; }
@@ -121,18 +124,11 @@
   .save-badge .pct { font: 800 clamp(28px,4.5vw,46px)/1 monospace; }
   .save-badge .lbl { font-size: clamp(12px,1.5vw,15px); }
 
-  /* ── BENEFIT FIGURES (slide 6) ── */
-  .figs { display: flex; gap: clamp(16px,3.5vw,48px); flex-wrap: wrap; justify-content: center; margin-top: 8px; }
-  .fig { display: flex; flex-direction: column; align-items: center; max-width: 190px; }
-  .fig .ic { font-size: clamp(38px,5.5vw,58px); margin-bottom: 8px; }
-  .fig .num { font: 800 clamp(30px,5vw,54px)/1 monospace; color: var(--green); }
-  .fig .cap { font-size: clamp(12px,1.5vw,15px); color: var(--muted); margin-top: 8px; line-height: 1.4; }
-
   /* ── CTA ── */
-  .btn { display: inline-block; background: linear-gradient(135deg, var(--blue), #a78bfa); color: #fff; font-size: clamp(15px,1.8vw,18px); font-weight: 700; padding: clamp(13px,1.8vh,16px) clamp(28px,3.5vw,42px); border-radius: 50px; border: none; cursor: pointer; letter-spacing: .5px; transition: transform .2s, box-shadow .2s; }
-  .btn:hover, .btn:active { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,131,253,0.4); }
+  .btn { display: inline-block; background: linear-gradient(135deg, var(--green), #2bb889); color: #06281f; font-size: clamp(15px,1.8vw,18px); font-weight: 800; padding: clamp(13px,1.8vh,16px) clamp(28px,3.5vw,42px); border-radius: 50px; border: none; cursor: pointer; letter-spacing: .3px; transition: transform .2s, box-shadow .2s; }
+  .btn:hover, .btn:active { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(78,204,163,0.4); }
 
-  /* ── PROGRESS BAR (top) ── */
+  /* ── PROGRESS BAR ── */
   .progress { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.08); z-index: 110; }
   .progress-fill { height: 100%; width: 14%; background: linear-gradient(90deg, var(--blue), var(--green)); transition: width 0.4s ease; box-shadow: 0 0 10px rgba(124,131,253,0.6); }
 
@@ -150,12 +146,26 @@
   .slide-num { position: fixed; top: 16px; right: clamp(16px,3vw,30px); font: 11px monospace; color: rgba(255,255,255,0.3); letter-spacing: 1px; z-index: 110; }
   .logo { position: fixed; top: 14px; left: clamp(16px,3vw,30px); font-size: clamp(15px,2vw,18px); font-weight: 800; color: var(--blue); letter-spacing: 1px; z-index: 110; }
 
-  /* ── SWIPE HINT (slide 1) ── */
   .swipe-hint { display: flex; align-items: center; gap: 10px; margin-top: clamp(16px,3vh,30px); color: var(--muted); font-size: clamp(13px,1.7vw,17px); font-weight: 600; }
   .swipe-hint .arrow { display: inline-flex; width: 34px; height: 34px; border-radius: 50%; background: rgba(124,131,253,0.18); border: 1px solid rgba(124,131,253,0.4); color: var(--blue); align-items: center; justify-content: center; font-size: 18px; animation: nudge 1.3s ease-in-out infinite; }
   @keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(7px); } }
 
-  @media (max-width: 600px) { .compare { flex-direction: column; } }
+  /* ── INTERACTIVE MAP (slide 1) ── */
+  .map-fig { width: min(94vw, 700px); margin: clamp(6px,1.4vh,14px) 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
+  .map-fig svg { display: block; width: 100%; height: auto; }
+  .pin path { fill: #5566a3; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); }
+  .pin text { font: 700 11px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
+  .play-row { display: flex; align-items: center; gap: clamp(12px,2vw,18px); margin-top: clamp(10px,1.8vh,16px); flex-wrap: wrap; justify-content: center; }
+  .km-badge { font: 800 clamp(20px,3.2vw,32px) monospace; color: var(--red); }
+  .km-badge small { font: 600 0.46em/1 'Segoe UI', sans-serif; color: var(--muted); letter-spacing: 0.5px; }
+  .replay-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: clamp(12px,1.4vw,14px); font-weight: 600; transition: background .2s; }
+  .replay-btn:hover { background: rgba(124,131,253,0.3); }
+
+  @media (max-width: 600px) {
+    .compare { flex-direction: column; }
+    .steps { flex-direction: column; }
+    .step-arrow { transform: rotate(90deg); }
+  }
 </style>
 </head>
 <body>
@@ -166,64 +176,107 @@
 
 <div class="deck">
 
-  <!-- ── 1 · TITRE + COMMENT NAVIGUER ── -->
+  <!-- ── 1 · LE PROBLÈME (carte interactive) ── -->
   <div class="slide slide-1 active">
-    <div class="eyebrow">Présentation · 7 écrans</div>
-    <h1>Le trajet le plus court,<br><span class="accent">calculé.</span></h1>
-    <div class="fig-wrap" style="max-width:380px">
-      <svg class="route-svg" viewBox="0 0 360 280">
-        <path class="path-good draw" d="M180,30 L65,70 L30,140 L65,210 L180,250 L295,210 L330,140 L295,70 Z" />
-        <circle class="depot-dot" cx="180" cy="30" r="14"/><text class="depot-lbl" x="180" y="30">D</text>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="65"  cy="70"  r="11"/>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="30"  cy="140" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="65"  cy="210" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="180" cy="250" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="295" cy="210" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="330" cy="140" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--green)" cx="295" cy="70"  r="11"/>
+    <div class="eyebrow">Livraison · Services terrain · Logistique</div>
+    <h1>Vos tournées coûtent<br><span class="danger">plus cher</span> que nécessaire</h1>
+
+    <div class="map-fig">
+      <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+            <path d="M32 0H0V32" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="600" height="360" fill="#0d1424"/>
+        <rect width="600" height="360" fill="url(#grid)"/>
+        <!-- quelques "blocs" de ville pour le décor -->
+        <rect x="40"  y="40"  width="120" height="70"  rx="6" fill="rgba(255,255,255,0.025)"/>
+        <rect x="360" y="200" width="150" height="90"  rx="6" fill="rgba(255,255,255,0.025)"/>
+        <rect x="240" y="60"  width="90"  height="60"  rx="6" fill="rgba(255,255,255,0.025)"/>
+
+        <!-- la tournée mal planifiée -->
+        <path id="badRoute" d="M300,70 L430,250 L95,130 L520,175 L175,285 L505,95 L90,250 L300,195 L300,70"
+              fill="none" stroke="var(--red)" stroke-width="3.5" stroke-linejoin="round"
+              stroke-linecap="round" stroke-dasharray="9 7" opacity="0.85"
+              style="filter: drop-shadow(0 0 5px rgba(255,107,107,0.5))"/>
+
+        <!-- dépôt -->
+        <g transform="translate(288,36)">
+          <path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z" fill="#ffd166"/>
+          <text x="12" y="12" text-anchor="middle" dominant-baseline="central" font="700 11px monospace" fill="#1a1a2e" style="font:700 11px monospace">D</text>
+        </g>
+
+        <!-- adresses (numérotées dans le mauvais ordre de passage) -->
+        <g class="pin" transform="translate(418,216)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">1</text></g>
+        <g class="pin" transform="translate(83,96)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">2</text></g>
+        <g class="pin" transform="translate(508,141)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">3</text></g>
+        <g class="pin" transform="translate(163,251)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">4</text></g>
+        <g class="pin" transform="translate(493,61)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">5</text></g>
+        <g class="pin" transform="translate(78,216)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">6</text></g>
+        <g class="pin" transform="translate(288,161)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">7</text></g>
+
+        <!-- le camion qui suit la tournée -->
+        <g id="truckG" opacity="0">
+          <text font-size="26" text-anchor="middle" dominant-baseline="central">🚚</text>
+          <animateMotion id="truckMotion" dur="6s" begin="indefinite" rotate="0" fill="freeze">
+            <mpath xlink:href="#badRoute"/>
+          </animateMotion>
+        </g>
       </svg>
     </div>
-    <div class="swipe-hint">
-      Glissez ou utilisez les flèches <span class="arrow">→</span>
+
+    <div class="play-row">
+      <span class="km-badge"><span id="kmCount">0</span><small> km parcourus</small></span>
+      <button type="button" class="replay-btn" onclick="runSlide1()">↻ Rejouer</button>
     </div>
+
+    <div class="swipe-hint">Glissez ou utilisez les flèches <span class="arrow">→</span></div>
   </div>
 
-  <!-- ── 2 · LE PROBLÈME ── -->
+  <!-- ── 2 · LES CONSÉQUENCES ── -->
   <div class="slide slide-2">
-    <div class="tag">Le problème</div>
-    <h2>L'ordre des arrêts est choisi<br><span class="danger">à la main</span></h2>
-    <div class="fig-wrap" style="max-width:400px">
-      <svg class="route-svg" viewBox="0 0 360 280">
-        <path class="path-bad draw" d="M180,30 L180,250 L65,70 L295,210 L30,140 L330,140 L65,210 L295,70 Z" />
-        <circle class="depot-dot" cx="180" cy="30" r="14"/><text class="depot-lbl" x="180" y="30">D</text>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="180" cy="250" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="65"  cy="70"  r="11"/>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="295" cy="210" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="30"  cy="140" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="330" cy="140" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="65"  cy="210" r="11"/>
-        <circle class="stop-dot" style="stroke:var(--red)" cx="295" cy="70"  r="11"/>
-      </svg>
+    <div class="tag red">Le problème</div>
+    <h2>Un mauvais trajet,<br>ça se paie <span class="danger">tous les jours</span></h2>
+    <div class="figs">
+      <div class="fig"><span class="ic">⛽</span><span class="cap">Carburant gaspillé en détours</span></div>
+      <div class="fig"><span class="ic">🕐</span><span class="cap">Heures de conduite en trop</span></div>
+      <div class="fig"><span class="ic">📦</span><span class="cap">Livraisons en retard</span></div>
+      <div class="fig"><span class="ic">😟</span><span class="cap">Clients mécontents</span></div>
     </div>
-    <div class="line"><span class="danger">Des kilomètres en trop</span>, invisibles à l'œil<br>mais payés chaque jour.</div>
   </div>
 
-  <!-- ── 3 · POURQUOI C'EST DUR (math simple) ── -->
+  <!-- ── 3 · LA FAÇON CLASSIQUE ── -->
   <div class="slide slide-3">
-    <div class="tag">Combien de trajets possibles ?</div>
-    <h2>Pour seulement <span class="accent">10 arrêts</span> :</h2>
-    <div class="mult">10 × 9 × 8 × 7 × 6 × 5 × 4 × 3 × 2 × 1</div>
-    <div class="equals">=</div>
-    <div class="bignum" id="factorial">0</div>
-    <div class="bignum-lbl">itinéraires possibles</div>
-    <div class="line"><span class="muted">Trop pour un humain.</span> Notre algorithme les explore <span class="good">tous</span>. ✨</div>
+    <div class="tag">Aujourd'hui</div>
+    <h2>La tournée est organisée<br><span class="danger">à la main</span></h2>
+    <div class="steps">
+      <div class="step"><span class="ic">📋</span><span class="lbl">La liste<br>des arrêts</span></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><span class="ic">🤔</span><span class="lbl">On devine<br>l'ordre</span></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><span class="ic">🕐</span><span class="lbl">30–60 min<br>perdues</span></div>
+    </div>
+    <div class="cap">À l'instinct, sans données de trafic — long, fastidieux,<br>et <b>presque jamais le meilleur trajet</b>.</div>
   </div>
 
-  <!-- ── 4 · LA MAGIE (solution) ── -->
+  <!-- ── 4 · LE COÛT CACHÉ ── -->
   <div class="slide slide-4">
+    <div class="tag red">Le coût caché</div>
+    <h2>Ce que ça vous coûte<br>vraiment</h2>
+    <div class="figs">
+      <div class="fig cost pop"><span class="ic">⛽</span><span class="num">+20%</span><span class="cap">de carburant en trop</span></div>
+      <div class="fig cost pop"><span class="ic">⏱️</span><span class="num">1h</span><span class="cap">perdue par jour, par chauffeur</span></div>
+      <div class="fig cost pop"><span class="ic">📉</span><span class="num">+30%</span><span class="cap">de livraisons en retard</span></div>
+    </div>
+    <div class="cap">Multiplié par vos véhicules, par vos jours d'activité.<br><b>Une facture invisible, mais bien réelle.</b></div>
+  </div>
+
+  <!-- ── 5 · LA SOLUTION ── -->
+  <div class="slide slide-5">
     <div class="tag">La solution</div>
-    <h2>On teste tout,<br>on garde <span class="good">le meilleur</span></h2>
-    <div class="fig-wrap" style="max-width:360px">
+    <h2>OptRoute trouve le<br><span class="good">meilleur trajet</span>, tout seul</h2>
+    <div class="fig-wrap" style="max-width:340px">
       <svg class="route-svg" viewBox="0 0 360 280">
         <path class="cand c1" d="M180,30 L65,210 L295,70 L30,140 L180,250 L330,140 L65,70 Z"/>
         <path class="cand c2" d="M180,30 L295,210 L65,70 L180,250 L330,140 L65,210 L30,140 Z"/>
@@ -240,18 +293,16 @@
         <circle class="stop-dot" style="stroke:#5b6385;stroke-width:2" cx="295" cy="70"  r="8"/>
       </svg>
     </div>
-    <div class="cap">Il essaie <b>des millions d'ordres en 1 seconde</b> et garde celui où&nbsp;:</div>
-    <div class="rule"><span class="d">distance</span> <span class="op">+</span> <span class="t">temps</span> <span class="sm">est le plus petit</span></div>
-    <div class="curio"><span class="sig">Σ</span> min ( distance + temps )</div>
+    <div class="cap">Vos arrêts → le trajet optimal en <b>15 secondes</b>,<br>trafic en temps réel inclus. Zéro planification manuelle.</div>
   </div>
 
-  <!-- ── 5 · AVANT / APRÈS ── -->
-  <div class="slide slide-5">
+  <!-- ── 6 · LE RÉSULTAT (ROI) ── -->
+  <div class="slide slide-6">
     <div class="tag">Le résultat</div>
-    <h2>La même tournée, <span class="good">recalculée</span></h2>
+    <h2>La même tournée, <span class="good">optimisée</span></h2>
     <div class="compare">
       <div class="col bad">
-        <div class="col-head">✗ Au hasard</div>
+        <div class="col-head">✗ À la main</div>
         <div class="col-panel">
           <svg class="route-svg" viewBox="0 0 360 280">
             <path class="path-bad" d="M180,30 L180,250 L65,70 L295,210 L30,140 L330,140 L65,210 L295,70 Z" />
@@ -285,26 +336,15 @@
         <div class="col-stat">31 km · 1h40</div>
       </div>
     </div>
-    <div class="save-badge pop"><span class="pct">−34%</span><span class="lbl">de route &amp; de temps</span></div>
-  </div>
-
-  <!-- ── 6 · BÉNÉFICES ── -->
-  <div class="slide slide-6">
-    <div class="tag">Ce que ça change</div>
-    <h2>Moins de trajet,<br><span class="good">tout le monde y gagne</span></h2>
-    <div class="figs">
-      <div class="fig pop"><span class="ic">⛽</span><span class="num">−30%</span><span class="cap">de carburant</span></div>
-      <div class="fig pop"><span class="ic">⏱️</span><span class="num">+50min</span><span class="cap">par jour et par chauffeur</span></div>
-      <div class="fig pop"><span class="ic">⚡</span><span class="num">15s</span><span class="cap">pour tout planifier</span></div>
-    </div>
+    <div class="save-badge pop"><span class="pct">−34%</span><span class="lbl">de coûts sur chaque tournée</span></div>
   </div>
 
   <!-- ── 7 · CTA ── -->
   <div class="slide slide-7">
-    <div class="eyebrow">À vous de jouer</div>
-    <h1>Essayez sur<br>votre <span class="accent">tournée</span></h1>
-    <div class="line muted" style="margin-bottom:clamp(20px,3vh,34px)">Un dépôt · vos arrêts · un clic</div>
-    <button class="btn" onclick="window.open('https://outstanding-creativity-production-b5ce.up.railway.app/','')">Ouvrir la démo →</button>
+    <div class="eyebrow">Prêt à réduire vos coûts ?</div>
+    <h1>Essayez OptRoute<br>sur votre <span class="good">tournée</span></h1>
+    <div class="line muted" style="margin-bottom:clamp(20px,3vh,34px)">Moins de carburant · Plus de livraisons · Dès aujourd'hui</div>
+    <button class="btn" onclick="window.open('http://localhost:8000','_blank')">Demander une démo →</button>
   </div>
 
 </div>
@@ -326,7 +366,6 @@
   const nextBtn  = document.getElementById('next');
   const slideNum = document.getElementById('slideNum');
   const progress = document.getElementById('progress');
-  const factEl   = document.getElementById('factorial');
 
   slides.forEach((_, i) => {
     const d = document.createElement('div');
@@ -344,17 +383,28 @@
     });
   }
 
-  function countUp(el, target, dur) {
-    if (!el) return;
-    const start = performance.now();
-    (function tick(now) {
-      const p = Math.min(1, (now - start) / dur);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.floor(eased * target).toLocaleString('fr-FR');
-      if (p < 1) requestAnimationFrame(tick);
-      else el.textContent = target.toLocaleString('fr-FR');
-    })(start);
+  // Slide 1: drive the truck along the badly-planned route while a live
+  // odometer climbs, so the wasted distance is tangible.
+  const TRUCK_KM = 47;
+  const TRUCK_DUR = 6000;
+  let kmRAF;
+  function runSlide1() {
+    const truck = document.getElementById('truckG');
+    const motion = document.getElementById('truckMotion');
+    const kmEl = document.getElementById('kmCount');
+    if (truck) truck.setAttribute('opacity', '1');
+    if (motion && motion.beginElement) { try { motion.beginElement(); } catch (e) {} }
+    if (kmEl) {
+      cancelAnimationFrame(kmRAF);
+      const start = performance.now();
+      (function tick(now) {
+        const p = Math.min(1, (now - start) / TRUCK_DUR);
+        kmEl.textContent = Math.round(p * TRUCK_KM);
+        if (p < 1) kmRAF = requestAnimationFrame(tick);
+      })(performance.now());
+    }
   }
+  window.runSlide1 = runSlide1;
 
   function goTo(n) {
     slides[cur].classList.remove('active');
@@ -363,13 +413,12 @@
     slides[cur].classList.add('active');
     slides[cur].scrollTop = 0;
     replayAnimations(slides[cur]);
-    if (cur === 2) countUp(factEl, 3628800, 1500);
     dotsEl.children[cur].classList.add('on');
     prevBtn.disabled = cur === 0;
     nextBtn.disabled = cur === total - 1;
     slideNum.textContent = String(cur + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
     progress.style.width = ((cur + 1) / total * 100) + '%';
-
+    if (cur === 0) runSlide1();
     if (!interacted) { interacted = true; nextBtn.classList.remove('cue'); }
   }
 
@@ -391,6 +440,9 @@
     if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
     dx < 0 ? goTo(cur + 1) : goTo(cur - 1);
   }, { passive: true });
+
+  // Kick off the slide-1 truck on first load.
+  window.addEventListener('load', runSlide1);
 </script>
 </body>
 </html>
