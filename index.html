@@ -151,10 +151,15 @@
   @keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(7px); } }
 
   /* ── INTERACTIVE MAP (slide 1) ── */
-  .map-fig { width: min(94vw, 700px); margin: clamp(6px,1.4vh,14px) 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
-  .map-fig svg { display: block; width: 100%; height: auto; }
+  /* Sized by the SMALLER of width / height so the whole map fits at 100% zoom. */
+  .map-fig { width: min(94vw, calc(52vh * 1.7273), 840px); aspect-ratio: 760 / 440; margin: clamp(4px,1vh,12px) 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
+  .map-fig svg { display: block; width: 100%; height: 100%; }
   .pin path { fill: #5566a3; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); }
-  .pin text { font: 700 11px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
+  .pin text { font: 700 12px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
+  .kmlbl rect { fill: #1b1322; stroke: rgba(255,107,107,0.55); stroke-width: 1; }
+  .kmlbl text { font: 700 13px monospace; fill: var(--gold); text-anchor: middle; dominant-baseline: central; }
+  /* compact title on the map slide so the bigger map fits */
+  .slide-1 h1 { font-size: clamp(22px,4vw,42px); margin-bottom: clamp(6px,1.2vh,12px); }
   .play-row { display: flex; align-items: center; gap: clamp(12px,2vw,18px); margin-top: clamp(10px,1.8vh,16px); flex-wrap: wrap; justify-content: center; }
   .km-badge { font: 800 clamp(20px,3.2vw,32px) monospace; color: var(--red); }
   .km-badge small { font: 600 0.46em/1 'Segoe UI', sans-serif; color: var(--muted); letter-spacing: 0.5px; }
@@ -182,44 +187,52 @@
     <h1>Vos tournées coûtent<br><span class="danger">plus cher</span> que nécessaire</h1>
 
     <div class="map-fig">
-      <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
-          <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M32 0H0V32" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <pattern id="grid" width="38" height="38" patternUnits="userSpaceOnUse">
+            <path d="M38 0H0V38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
           </pattern>
         </defs>
-        <rect width="600" height="360" fill="#0d1424"/>
-        <rect width="600" height="360" fill="url(#grid)"/>
-        <!-- quelques "blocs" de ville pour le décor -->
-        <rect x="40"  y="40"  width="120" height="70"  rx="6" fill="rgba(255,255,255,0.025)"/>
-        <rect x="360" y="200" width="150" height="90"  rx="6" fill="rgba(255,255,255,0.025)"/>
-        <rect x="240" y="60"  width="90"  height="60"  rx="6" fill="rgba(255,255,255,0.025)"/>
+        <rect width="760" height="440" fill="#0d1424"/>
+        <rect width="760" height="440" fill="url(#grid)"/>
+        <!-- blocs de ville (décor) -->
+        <rect x="60"  y="60"  width="150" height="90"  rx="8" fill="rgba(255,255,255,0.025)"/>
+        <rect x="470" y="250" width="180" height="110" rx="8" fill="rgba(255,255,255,0.025)"/>
+        <rect x="300" y="80"  width="120" height="70"  rx="8" fill="rgba(255,255,255,0.025)"/>
 
         <!-- la tournée mal planifiée -->
-        <path id="badRoute" d="M300,70 L430,250 L95,130 L520,175 L175,285 L505,95 L90,250 L300,195 L300,70"
-              fill="none" stroke="var(--red)" stroke-width="3.5" stroke-linejoin="round"
-              stroke-linecap="round" stroke-dasharray="9 7" opacity="0.85"
+        <path id="badRoute" d="M380,45 L662,280 L120,133 L640,307 L120,307 L640,133 L380,400 L380,45"
+              fill="none" stroke="var(--red)" stroke-width="4" stroke-linejoin="round"
+              stroke-linecap="round" stroke-dasharray="10 8" opacity="0.85"
               style="filter: drop-shadow(0 0 5px rgba(255,107,107,0.5))"/>
 
+        <!-- distances (km) sur chaque tronçon -->
+        <g class="kmlbl" transform="translate(537,119)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>5 km</text></g>
+        <g class="kmlbl" transform="translate(480,217)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>9 km</text></g>
+        <g class="kmlbl" transform="translate(295,191)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>8 km</text></g>
+        <g class="kmlbl" transform="translate(441,348)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>7 km</text></g>
+        <g class="kmlbl" transform="translate(295,249)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>8 km</text></g>
+        <g class="kmlbl" transform="translate(576,253)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>5 km</text></g>
+        <g class="kmlbl" transform="translate(380,297)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>5 km</text></g>
+
         <!-- dépôt -->
-        <g transform="translate(288,36)">
-          <path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z" fill="#ffd166"/>
-          <text x="12" y="12" text-anchor="middle" dominant-baseline="central" font="700 11px monospace" fill="#1a1a2e" style="font:700 11px monospace">D</text>
+        <g transform="translate(367,8)">
+          <path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z" fill="#ffd166"/>
+          <text x="13" y="13" text-anchor="middle" dominant-baseline="central" fill="#1a1a2e" style="font:700 12px monospace">D</text>
         </g>
 
         <!-- adresses (numérotées dans le mauvais ordre de passage) -->
-        <g class="pin" transform="translate(418,216)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">1</text></g>
-        <g class="pin" transform="translate(83,96)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">2</text></g>
-        <g class="pin" transform="translate(508,141)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">3</text></g>
-        <g class="pin" transform="translate(163,251)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">4</text></g>
-        <g class="pin" transform="translate(493,61)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">5</text></g>
-        <g class="pin" transform="translate(78,216)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">6</text></g>
-        <g class="pin" transform="translate(288,161)"><path d="M12,34 C6,24 2,18 2,12 A10,10 0 1 1 22,12 C22,18 18,24 12,34 Z"/><text x="12" y="12">7</text></g>
+        <g class="pin" transform="translate(649,243)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">1</text></g>
+        <g class="pin" transform="translate(107,96)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">2</text></g>
+        <g class="pin" transform="translate(627,270)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">3</text></g>
+        <g class="pin" transform="translate(107,270)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">4</text></g>
+        <g class="pin" transform="translate(627,96)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">5</text></g>
+        <g class="pin" transform="translate(367,363)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">6</text></g>
 
         <!-- le camion qui suit la tournée -->
         <g id="truckG" opacity="0">
-          <text font-size="26" text-anchor="middle" dominant-baseline="central">🚚</text>
-          <animateMotion id="truckMotion" dur="6s" begin="indefinite" rotate="0" fill="freeze">
+          <text font-size="30" text-anchor="middle" dominant-baseline="central">🚚</text>
+          <animateMotion id="truckMotion" dur="11s" begin="indefinite" rotate="0" fill="freeze">
             <mpath xlink:href="#badRoute"/>
           </animateMotion>
         </g>
@@ -386,7 +399,7 @@
   // Slide 1: drive the truck along the badly-planned route while a live
   // odometer climbs, so the wasted distance is tangible.
   const TRUCK_KM = 47;
-  const TRUCK_DUR = 6000;
+  const TRUCK_DUR = 11000;
   let kmRAF;
   function runSlide1() {
     const truck = document.getElementById('truckG');
