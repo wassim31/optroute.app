@@ -169,12 +169,12 @@
 
   /* ── INTERACTIVE MAP (slide 1) ── */
   /* Sized by the SMALLER of width / height so the whole map fits at 100% zoom. */
-  .map-fig { width: min(94vw, calc(52vh * 1.7273), 840px); aspect-ratio: 760 / 440; margin: clamp(4px,1vh,12px) 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
+  .map-fig { width: min(94vw, calc(52vh * 1.7083), 880px); aspect-ratio: 820 / 480; margin: clamp(4px,1vh,12px) 0; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
   .map-fig svg { display: block; width: 100%; height: 100%; }
-  .pin path { fill: #5566a3; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); }
-  .pin text { font: 700 12px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
-  .kmlbl rect { fill: #1b1322; stroke: rgba(255,107,107,0.55); stroke-width: 1; }
-  .kmlbl text { font: 700 13px monospace; fill: var(--gold); text-anchor: middle; dominant-baseline: central; }
+  .pin path { fill: #6c74e8; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.55)); }
+  .pin text { font: 800 13px monospace; fill: #fff; text-anchor: middle; dominant-baseline: central; }
+  .kmlbl rect { fill: rgba(20,16,28,0.92); stroke: rgba(255,209,102,0.55); stroke-width: 1; }
+  .kmlbl text { font: 800 13px monospace; fill: var(--gold); text-anchor: middle; dominant-baseline: central; }
   /* compact title on the map slide so the bigger map fits */
   .slide-1 h1 { font-size: clamp(22px,4vw,42px); margin-bottom: clamp(6px,1.2vh,12px); }
   .play-row { display: flex; align-items: center; gap: clamp(12px,2vw,18px); margin-top: clamp(10px,1.8vh,16px); flex-wrap: wrap; justify-content: center; }
@@ -205,51 +205,62 @@
     <h1>Vos tournées coûtent<br><span class="danger">plus cher</span> que nécessaire</h1>
 
     <div class="map-fig">
-      <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg viewBox="0 0 820 480" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
-          <pattern id="grid" width="38" height="38" patternUnits="userSpaceOnUse">
-            <path d="M38 0H0V38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <pattern id="minor" width="27" height="27" patternUnits="userSpaceOnUse">
+            <path d="M27 0H0V27" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>
           </pattern>
+          <pattern id="major" width="108" height="108" patternUnits="userSpaceOnUse">
+            <path d="M108 0H0V108" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1.5"/>
+          </pattern>
+          <radialGradient id="vignette" cx="50%" cy="46%" r="72%">
+            <stop offset="55%" stop-color="rgba(0,0,0,0)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0.5)"/>
+          </radialGradient>
         </defs>
-        <rect width="760" height="440" fill="#0d1424"/>
-        <rect width="760" height="440" fill="url(#grid)"/>
-        <!-- blocs de ville (décor) -->
-        <rect x="60"  y="60"  width="150" height="90"  rx="8" fill="rgba(255,255,255,0.025)"/>
-        <rect x="470" y="250" width="180" height="110" rx="8" fill="rgba(255,255,255,0.025)"/>
-        <rect x="300" y="80"  width="120" height="70"  rx="8" fill="rgba(255,255,255,0.025)"/>
 
-        <!-- la tournée mal planifiée -->
-        <path id="badRoute" d="M380,45 L662,280 L120,133 L640,307 L120,307 L640,133 L380,400 L380,45"
-              fill="none" stroke="var(--red)" stroke-width="4" stroke-linejoin="round"
-              stroke-linecap="round" stroke-dasharray="10 8" opacity="0.85"
-              style="filter: drop-shadow(0 0 5px rgba(255,107,107,0.5))"/>
+        <!-- fond plan de ville -->
+        <rect width="820" height="480" fill="#0e1626"/>
+        <ellipse cx="115" cy="120" rx="135" ry="85" fill="rgba(78,204,163,0.07)"/>   <!-- parc -->
+        <ellipse cx="720" cy="470" rx="260" ry="120" fill="rgba(70,130,205,0.08)"/>  <!-- rivière -->
+        <rect width="820" height="480" fill="url(#minor)"/>
+        <rect width="820" height="480" fill="url(#major)"/>
+        <rect width="820" height="480" fill="url(#vignette)"/>
 
-        <!-- distances (km) sur chaque tronçon -->
-        <g class="kmlbl" transform="translate(537,119)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>5 km</text></g>
-        <g class="kmlbl" transform="translate(480,217)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>9 km</text></g>
-        <g class="kmlbl" transform="translate(295,191)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>8 km</text></g>
-        <g class="kmlbl" transform="translate(441,348)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>7 km</text></g>
-        <g class="kmlbl" transform="translate(295,249)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>8 km</text></g>
-        <g class="kmlbl" transform="translate(576,253)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>5 km</text></g>
-        <g class="kmlbl" transform="translate(380,297)"><rect x="-23" y="-13" width="46" height="26" rx="13"/><text>5 km</text></g>
+        <!-- la tournée mal planifiée : casing + ligne -->
+        <path d="M410,70 L327,400 L133,154 L729,253 L120,309 L594,376 L655,130 L410,70"
+              fill="none" stroke="#0e1626" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+        <path id="badRoute" d="M410,70 L327,400 L133,154 L729,253 L120,309 L594,376 L655,130 L410,70"
+              fill="none" stroke="var(--red)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"
+              style="filter: drop-shadow(0 0 7px rgba(255,107,107,0.55))"/>
+
+        <!-- distances (km) bien espacées -->
+        <g class="kmlbl" transform="translate(329,232)"><rect x="-24" y="-13" width="48" height="26" rx="13"/><text>6 km</text></g>
+        <g class="kmlbl" transform="translate(191,285)"><rect x="-24" y="-13" width="48" height="26" rx="13"/><text>5 km</text></g>
+        <g class="kmlbl" transform="translate(452,169)"><rect x="-26" y="-13" width="52" height="26" rx="13"/><text>10 km</text></g>
+        <g class="kmlbl" transform="translate(437,319)"><rect x="-26" y="-13" width="52" height="26" rx="13"/><text>10 km</text></g>
+        <g class="kmlbl" transform="translate(470,358)"><rect x="-24" y="-13" width="48" height="26" rx="13"/><text>8 km</text></g>
+        <g class="kmlbl" transform="translate(664,256)"><rect x="-24" y="-13" width="48" height="26" rx="13"/><text>4 km</text></g>
+        <g class="kmlbl" transform="translate(559,70)"><rect x="-24" y="-13" width="48" height="26" rx="13"/><text>4 km</text></g>
 
         <!-- dépôt -->
-        <g transform="translate(367,8)">
-          <path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z" fill="#ffd166"/>
-          <text x="13" y="13" text-anchor="middle" dominant-baseline="central" fill="#1a1a2e" style="font:700 12px monospace">D</text>
+        <g transform="translate(396,30)">
+          <ellipse cx="14" cy="42" rx="11" ry="3.5" fill="rgba(0,0,0,0.35)"/>
+          <path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z" fill="#ffd166" stroke="#fff" stroke-width="2"/>
+          <text x="14" y="14" text-anchor="middle" dominant-baseline="central" fill="#1a1a2e" style="font:800 13px monospace">D</text>
         </g>
 
         <!-- adresses (numérotées dans le mauvais ordre de passage) -->
-        <g class="pin" transform="translate(649,243)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">1</text></g>
-        <g class="pin" transform="translate(107,96)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">2</text></g>
-        <g class="pin" transform="translate(627,270)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">3</text></g>
-        <g class="pin" transform="translate(107,270)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">4</text></g>
-        <g class="pin" transform="translate(627,96)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">5</text></g>
-        <g class="pin" transform="translate(367,363)"><path d="M13,37 C7,26 2,20 2,13 A11,11 0 1 1 24,13 C24,20 19,26 13,37 Z"/><text x="13" y="13">6</text></g>
+        <g class="pin" transform="translate(313,360)"><path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z"/><text x="14" y="14">1</text></g>
+        <g class="pin" transform="translate(119,114)"><path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z"/><text x="14" y="14">2</text></g>
+        <g class="pin" transform="translate(715,213)"><path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z"/><text x="14" y="14">3</text></g>
+        <g class="pin" transform="translate(106,269)"><path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z"/><text x="14" y="14">4</text></g>
+        <g class="pin" transform="translate(580,336)"><path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z"/><text x="14" y="14">5</text></g>
+        <g class="pin" transform="translate(641,90)"><path d="M14,40 C7,28 2,22 2,14 A12,12 0 1 1 26,14 C26,22 21,28 14,40 Z"/><text x="14" y="14">6</text></g>
 
         <!-- le camion qui suit la tournée -->
         <g id="truckG" opacity="0">
-          <text font-size="30" text-anchor="middle" dominant-baseline="central">🚚</text>
+          <text font-size="32" text-anchor="middle" dominant-baseline="central">🚚</text>
           <animateMotion id="truckMotion" dur="11s" begin="indefinite" rotate="0" fill="freeze">
             <mpath xlink:href="#badRoute"/>
           </animateMotion>
